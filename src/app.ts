@@ -1,24 +1,22 @@
 import express from "express";
-import httpServer from "httpServer";
+import { createServer } from "http";
 
 import AuthMiddleware from "./middleware/Auth.js";
 
-import push from "./routes/push";
-import delete from "./routes/delete";
-import get from "./routes/get";
+import notes from "./routes/notes";
+import tags from "./routes/tags";
 
+const httpServer = createServer();
 const app = express();
 
 
 app.use(AuthMiddleware);
 
-// /push /delete /get
-app.use('/push', push);
-app.use('/delete', delete);
-app.use('/get', get);
 
+app.use('/notes', notes);
+app.use('/tags', tags);
 
 
 httpServer.listen(3000, () => {
-  console.log(`Serveur Express + WebSocket sur le port 3000`);
+  console.log(`Serveur Express up`);
 });

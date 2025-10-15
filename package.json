@@ -20,7 +20,8 @@
   "homepage": "https://github.com/SilverCore-Git/silvernote_db#readme",
   "dependencies": {
     "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
