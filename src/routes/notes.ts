@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { getDB } from "../db";
-import { ObjectId } from "mongodb";
 
 const router = Router();
 
@@ -70,21 +69,22 @@ router.post("/update", async (req, res) => {
 });
 
 
-// ❌ DELETE — Supprimer une note
-router.delete("/:id", async (req, res) => {
+// delete a note by uuid
+router.delete("/:uuid", async (req, res) => {
   try {
-    const { id } = req.params;
+    const uuid = req.params.uuid;
     const db = getDB();
-    const result = await db.collection("notes").deleteOne({ _id: new ObjectId(id) });
+    const result = await db.collection("notes").deleteOne({ uuid });
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Note non trouvée" });
+      return res.status(404).json({ error: "Note not found" });
     }
 
-    res.json({ message: "Note supprimée avec succès" });
+    res.json({ message: "Note deleted with success" });
   } catch (err) {
-    res.status(500).json({ error: "Erreur lors de la suppression" });
+    res.status(500).json({ error: "Error on delete" });
   }
 });
+
 
 export default router;
