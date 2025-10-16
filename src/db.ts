@@ -14,11 +14,11 @@ let db: Db;
 async function connectDB() {
   await client.connect();
   db = client.db("silvernote");
-  console.log("✅ Connecté à MongoDB");
+  console.log("Connected to MongoDB");
 }
 
 function getDB() {
-  if (!db) throw new Error("❌ La base n’est pas connectée !");
+  if (!db) throw new Error("Mongodb as not connected !");
   return db;
 }
 
