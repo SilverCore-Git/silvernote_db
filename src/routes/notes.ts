@@ -28,6 +28,17 @@ router.get('/get/:uuid', async (req, res) => {
 });
 
 
+// get note by user id
+router.get('/get/byuserid/:userid', async (req, res) => {
+  try {
+    const db = getDB();
+    const note = await db.collection("notes").find({ user_id: req.params.userid }).toArray();
+    res.json(note);
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err) || err.message, state: "Error on notes get" });
+  }
+});
+
 
 // add a note
 router.post("/push", async (req, res) => {
