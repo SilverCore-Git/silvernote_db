@@ -10,8 +10,8 @@ router.get("/getall", async (req, res) => {
     const db = getDB();
     const tags = await db.collection("tags").find().toArray();
     res.json(tags);
-  } catch (err) {
-    res.status(500).json({ error: "Error on tag get" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err), state: "Error on tag get" });
   }
 });
 
@@ -22,8 +22,8 @@ router.get('/get/:uuid', async (req, res) => {
     const db = getDB();
     const tag = await db.collection("tags").find({ uuid: req.params.uuid }).toArray();
     res.json(tag);
-  } catch (err) {
-    res.status(500).json({ error: "Error on tags get" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err), state: "Error on tags get" });
   }
 });
 
@@ -38,13 +38,13 @@ router.post("/push", async (req, res) => {
     const db = getDB();
     const result = await db.collection("tags").insertOne({
       ...tag,
-      addedAt: new Date(),
-      lastSaveAt: new Date(),
+      addedAt: new Date().getDate(),
+      lastSaveAt: new Date().getDate(),
     });
 
     res.status(201).json({ uuid: tag.uuid, _id: result.insertedId });
-  } catch (err) {
-    res.status(500).json({ error: "Error on tag push" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, state: "Error on tag push", message: err.message || String(err) });
   }
 });
 
@@ -58,19 +58,19 @@ router.post("/update", async (req, res) => {
     const db = getDB();
     const result = await db.collection("tags").updateOne(
       { uuid: tag.uuid },
-      { $set: { ...tag, lastSaveAt: new Date() } },
+      { $set: { ...tag, lastSaveAt: new Date().getDate() } },
       { upsert: true }
     );
 
     res.status(201).json({ uuid: tag.uuid, _id: result.upsertedId });
-  } catch (err) {
-    res.status(500).json({ error: "Error on tag update" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err), state: "Error on tag update" });
   }
 });
 
 
 // delete a tag by uuid
-router.delete("/:uuid", async (req, res) => {
+router.delete("/delete/:uuid", async (req, res) => {
   try {
     const uuid = req.params.uuid;
     const db = getDB();
@@ -81,8 +81,8 @@ router.delete("/:uuid", async (req, res) => {
     }
 
     res.json({ message: "tag deleted with success" });
-  } catch (err) {
-    res.status(500).json({ error: "Error on delete" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err), state: "Error on delete" });
   }
 });
 

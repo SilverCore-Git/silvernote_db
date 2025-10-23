@@ -22,8 +22,8 @@ router.get('/get/:uuid', async (req, res) => {
     const db = getDB();
     const note = await db.collection("notes").find({ uuid: req.params.uuid }).toArray();
     res.json(note);
-  } catch (err) {
-    res.status(500).json({ error: "Error on notes get" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err) || err.message, state: "Error on notes get" });
   }
 });
 
@@ -38,13 +38,13 @@ router.post("/push", async (req, res) => {
     const db = getDB();
     const result = await db.collection("notes").insertOne({
       ...note,
-      addedAt: new Date(),
-      lastSaveAt: new Date(),
+      addedAt: new Date().getDate(),
+      lastSaveAt: new Date().getDate(),
     });
 
     res.status(201).json({ uuid: note.uuid, _id: result.insertedId });
-  } catch (err) {
-    res.status(500).json({ error: "Error on note push" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err), state: "Error on note push" });
   }
 });
 
@@ -58,31 +58,31 @@ router.post("/update", async (req, res) => {
     const db = getDB();
     const result = await db.collection("notes").updateOne(
       { uuid: note.uuid },
-      { $set: { ...note, lastSaveAt: new Date() } },
+      { $set: { ...note, lastSaveAt: new Date().getDate() } },
       { upsert: true }
     );
 
     res.status(201).json({ uuid: note.uuid, _id: result.upsertedId });
-  } catch (err) {
-    res.status(500).json({ error: "Error on note update" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, state: "Error on note update", message: err.message || String(err) });
   }
 });
 
 
 // delete a note by uuid
-router.delete("/:uuid", async (req, res) => {
+router.delete("/delete/:uuid", async (req, res) => {
   try {
     const uuid = req.params.uuid;
     const db = getDB();
     const result = await db.collection("notes").deleteOne({ uuid });
 
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Note not found" });
+      return res.status(404).json({ error: true, message: "Note not found" });
     }
 
-    res.json({ message: "Note deleted with success" });
-  } catch (err) {
-    res.status(500).json({ error: "Error on delete" });
+    res.json({ success: true, message: "Note deleted with success" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err) || err.message, state: "Error on delete" });
   }
 });
 

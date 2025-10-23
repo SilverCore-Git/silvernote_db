@@ -1,12 +1,12 @@
 import { MongoClient, Db } from "mongodb";
 
 const db_credentials = {
-  uesr: process.env.DB_USER,
+  user: process.env.DB_USER,
   pass: process.env.DB_PASS,
   host: process.env.DB_HOST,
 };
 
-const uri: string = `mongodb+srv://${db_credentials.uesr}:${db_credentials.pass}@${db_credentials.host}`;
+const uri: string = `mongodb://${db_credentials.user}:${db_credentials.pass}@${db_credentials.host}/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=silvernote&appName=mongosh+2.5.8`;
 const client = new MongoClient(uri);
 
 let db: Db;

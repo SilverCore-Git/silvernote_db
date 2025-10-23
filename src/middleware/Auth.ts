@@ -1,33 +1,36 @@
 import type { NextFunction, Request, Response } from 'express';
-import 'dotenv';
 
 
-const API_SK = process.env.API_SK
+export default function AuthMiddleware(req: Request, res: Response, next: NextFunction) {
+        
+    const apiKey1 = req.headers['authorization'];
+    const apiKey2 = req.headers['x-api-key'];
 
+    const API_SK_1 = process.env.API_SK_1;
+    const API_SK_2 = process.env.API_SK_2;
 
-export default function AuthMiddleware(
-    req: Request, 
-    res: Response, 
-    next: NextFunction
-) 
-{
-
-    const client_api_sk = req.headers['authorisation'];
     const client_data = {
-        "for": req.path,
-        "by": req.ip,
-        "date": new Date().toString
+        path: req.path,
+        ip: req.ip,
+        date: new Date().toISOString(),
     };
 
-    if (client_api_sk === API_SK) 
-    {
-        console.log("New auth access :", client_data);
-        return next();
-    }
-    else
-    {
-        console.log('Access none auth :', client_data);
-        return res.json({ error: true, message: "auth failed, sk didn't match." });
+    if (!apiKey1 || !apiKey2) {
+        return res.status(401).json({ error: true, message: 'Missing API keys' });
     }
 
-};
+    if (!API_SK_1 || !API_SK_2) {
+        console.error('Missing server API keys in environment');
+        return res.status(500).json({ error: true, message: 'Server misconfigured' });
+    }
+
+    const authOk = apiKey1 === API_SK_1 && apiKey2 === API_SK_2;
+
+    if (!authOk) {
+        console.warn('Unauthorized access attempt:', client_data);
+        return res.status(403).json({ error: true, message: "Authentication failed" });
+    }
+
+    next();
+
+}
