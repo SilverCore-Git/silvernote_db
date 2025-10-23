@@ -86,5 +86,22 @@ router.delete("/delete/:uuid", async (req, res) => {
   }
 });
 
+// delete tags by user id
+router.delete("/delete/byuserid/:userid", async (req, res) => {
+  try {
+    const userid = req.params.userid;
+    const db = getDB();
+    const result = await db.collection("tags").deleteMany({ user_id: userid });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: true, message: "Tag not found" });
+    }
+
+    res.json({ success: true, message: "Tag deleted with success" });
+  } catch (err:any) {
+    res.status(500).json({ error: true, message: err.message || String(err) || err.message, state: "Error on delete" });
+  }
+});
+
 
 export default router;
