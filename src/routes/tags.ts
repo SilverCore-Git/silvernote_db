@@ -49,8 +49,8 @@ router.post("/push", async (req, res) => {
     const db = getDB();
     const result = await db.collection("tags").insertOne({
       ...tag,
-      addedAt: new Date().getDate(),
-      lastSaveAt: new Date().getDate(),
+      addedAt: new Date(),
+      lastSaveAt: new Date(),
     });
 
     res.status(201).json({ uuid: tag.uuid, _id: result.insertedId });
@@ -67,13 +67,13 @@ router.post("/update", async (req, res) => {
     if (!tag) return res.status(400).json({ error: "Missing body" });
 
     const db = getDB();
-    const result = await db.collection("tags").updateOne(
+    await db.collection("tags").updateOne(
       { uuid: tag.uuid },
-      { $set: { ...tag, lastSaveAt: new Date().getDate() } },
+      { $set: { ...tag, lastSaveAt: new Date() } },
       { upsert: true }
     );
 
-    res.status(201).json({ uuid: tag.uuid, _id: result.upsertedId });
+    res.status(201).json({ uuid: tag.uuid });
   } catch (err:any) {
     res.status(500).json({ error: true, message: err.message || String(err), state: "Error on tag update" });
   }
