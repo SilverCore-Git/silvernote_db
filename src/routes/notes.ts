@@ -97,7 +97,7 @@ router.delete("/delete/:uuid", async (req, res) => {
   }
 });
 
-// delete a note by user id
+// delete notes by user id
 router.delete("/delete/byuserid/:userid", async (req, res) => {
   try {
     const userid = req.params.userid;
