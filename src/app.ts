@@ -6,19 +6,21 @@ import AuthMiddleware from "./middleware/Auth";
 
 import notes from "./routes/notes";
 import tags from "./routes/tags";
+import visitors from "./routes/visitors";
 import { SilverIssueMiddleware } from "./lib/silverissue";
 import { connectDB, getDB } from "./db";
 
 const app = express();
 
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan('dev'));
 app.use(SilverIssueMiddleware);
 app.use(AuthMiddleware);
 
 
 app.use('/notes', notes);
 app.use('/tags', tags);
+app.use('/visitors', visitors);
 
 app.get('/ping', (req, res) => {
   const db = getDB();
