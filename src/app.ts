@@ -9,6 +9,7 @@ import tags from "./routes/tags";
 import visitors from "./routes/visitors";
 import { SilverIssueMiddleware } from "./lib/silverissue";
 import { connectDB, getDB } from "./db";
+import file from './routes/file';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(AuthMiddleware);
 app.use('/notes', notes);
 app.use('/tags', tags);
 app.use('/visitors', visitors);
+app.use('/file', file);
 
 app.get('/ping', (req, res) => {
   const db = getDB();
