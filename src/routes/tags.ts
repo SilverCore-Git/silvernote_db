@@ -46,6 +46,8 @@ router.post("/push", async (req, res) => {
     const tag = req.body.tag;
     if (!tag) return res.status(400).json({ error: "Missing body" });
 
+    if (tag._id) delete tag._id;
+
     const db = getDB();
     const result = await db.collection("tags").insertOne({
       ...tag,

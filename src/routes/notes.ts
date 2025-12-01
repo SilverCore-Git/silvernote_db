@@ -61,21 +61,43 @@ router.post("/push", async (req, res) => {
 
 
 // update a note
+// router.post("/update", async (req, res) => {
+//   try {
+//     const note = req.body.note;
+//     if (!note) return res.status(400).json({ error: "Missing body" });
+
+//     const db = getDB();
+//     await db.collection("notes").updateOne(
+//       { uuid: note.uuid },
+//       { $set: { ...note, lastSaveAt: new Date() } },
+//       { upsert: true }
+//     );
+
+//     res.status(201).json({ uuid: note.uuid });
+//   } catch (err:any) {
+//     res.status(500).json({ error: true, state: "Error on note update", message: err.message || String(err) });
+//     throw new Error(`"Error on note update : ${err}`);
+//   }
+// });
+
 router.post("/update", async (req, res) => {
   try {
     const note = req.body.note;
     if (!note) return res.status(400).json({ error: "Missing body" });
+    
+    if (note._id) delete note._id;
 
     const db = getDB();
-    await db.collection("notes").updateOne(
+    const result = await db.collection("notes").updateOne(
       { uuid: note.uuid },
       { $set: { ...note, lastSaveAt: new Date() } },
       { upsert: true }
     );
 
-    res.status(201).json({ uuid: note.uuid });
+    res.status(201).json({ uuid: note.uuid, _id: result.upsertedId });
   } catch (err:any) {
     res.status(500).json({ error: true, state: "Error on note update", message: err.message || String(err) });
+    throw new Error(`"Error on note update : ${err}`);
   }
 });
 

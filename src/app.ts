@@ -12,7 +12,7 @@ import { connectDB, getDB } from "./db";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "1000mb" }));
 app.use(morgan('dev'));
 app.use(SilverIssueMiddleware);
 app.use(AuthMiddleware);
