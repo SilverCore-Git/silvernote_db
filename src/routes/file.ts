@@ -8,8 +8,8 @@ import db from '../assets/database/FileDb';
 
 const router = Router();
 
-const dataDir: string = path.join(__dirname, 'db_file');
-const uploadDir: string = path.join(__dirname, 'temp');
+const dataDir: string = path.join(__dirname, '../db_file');
+const uploadDir: string = path.join(__dirname, '../temp');
 
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        cb(null, file.filename);
+        cb(null, file.originalname);
     }
 });
 

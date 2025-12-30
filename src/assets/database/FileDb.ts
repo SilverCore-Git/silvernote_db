@@ -4,7 +4,7 @@ import path from "path";
 import { File } from "./dbTypes";
 
 
-const DB_FILE = path.join(__dirname, '../../', 'db.json');
+const DB_FILE = path.join(__dirname, '../../', 'file_db.json');
 
 if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify([]), 'utf-8');
 
