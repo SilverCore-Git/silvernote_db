@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getDB } from "../db";
+import { getDB } from "../../db";
 
 const router = Router();
 
@@ -12,6 +12,17 @@ router.get("/getall", async (req, res) => {
     res.json(notes);
   } catch (err) {
     res.status(500).json({ error: "Error on note get" });
+  }
+});
+
+// get length
+router.get("/length", async (req, res) => {
+  try {
+    const db = getDB();
+    const length = await db.collection("notes").countDocuments();
+    res.json({ length });
+  } catch (err) {
+    res.status(500).json({ error: "Error on get note length" });
   }
 });
 

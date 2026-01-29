@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getDB } from "../db";
+import { getDB } from "../../db";
 
 const router = Router();
 
@@ -12,6 +12,18 @@ router.get("/getall", async (req, res) => {
     res.json(tags);
   } catch (err:any) {
     res.status(500).json({ error: true, message: err.message || String(err), state: "Error on tag get" });
+  }
+});
+
+
+// get length
+router.get("/length", async (req, res) => {
+  try {
+    const db = getDB();
+    const length = await db.collection("tags").countDocuments();
+    res.json({ length });
+  } catch (err) {
+    res.status(500).json({ error: "Error on get tag length" });
   }
 });
 

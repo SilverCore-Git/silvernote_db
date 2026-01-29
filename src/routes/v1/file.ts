@@ -3,8 +3,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { randomUUID } from 'crypto';
-import { File } from "../assets/database/dbTypes";
-import db from '../assets/database/FileDb';
+import { File } from "../../assets/database/dbTypes";
+import db from '../../assets/database/FileDb';
 
 const router = Router();
 

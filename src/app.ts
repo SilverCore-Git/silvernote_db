@@ -4,12 +4,12 @@ import 'dotenv/config';
 
 import AuthMiddleware from "./middleware/Auth";
 
-import notes from "./routes/notes";
-import tags from "./routes/tags";
-import visitors from "./routes/visitors";
+import notes from "./routes/v1/notes";
+import tags from "./routes/v1/tags";
+import visitors from "./routes/v1/visitors";
 import { SilverIssueMiddleware } from "./lib/silverissue";
 import { connectDB, getDB } from "./db";
-import file from './routes/file';
+import file from './routes/v1/file';
 
 const app = express();
 
@@ -23,6 +23,11 @@ app.use('/notes', notes);
 app.use('/tags', tags);
 app.use('/visitors', visitors);
 app.use('/file', file);
+
+app.use('/v1/notes', notes);
+app.use('/v1/tags', tags);
+app.use('/v1/visitors', visitors);
+app.use('/v1/file', file);
 
 app.get('/ping', (req, res) => {
   const db = getDB();
