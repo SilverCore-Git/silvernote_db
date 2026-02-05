@@ -51,6 +51,45 @@ router.get('/get/byuserid/:userid', async (req, res) => {
   }
 });
 
+// get with start and end index
+router.get("/get/byuserid/:userid/WithIndex/:start/:end", async (req, res) => {
+
+  try {
+
+    const userId = req.params.userid;
+    const start = parseInt(req.params.start) || 0;
+    const end = parseInt(req.params.end) || 20;
+
+    // Calcul du nombre d'éléments à récupérer
+    // Exemple: de 0 à 10 = 10 éléments.
+    const limit = Math.max(0, end - start); 
+    const skip = Math.max(0, start);
+
+    const db = getDB();
+    const tags = await db.collection("tags")
+      .find({ userId: userId })
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    // on renvoye aussi le total pour aider le front à gérer ses limites
+    const totalTags = await db.collection("tags").countDocuments({ userId: userId });
+
+    res.json({
+      tags,
+      total: totalTags,
+      count: tags.length,
+      range: { start, end }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching indexed tags" });
+  }
+  
+});
+
 
 // add a tag
 router.post("/push", async (req, res) => {
