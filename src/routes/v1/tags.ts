@@ -67,14 +67,14 @@ router.get("/get/byuserid/:userid/WithIndex/:start/:end", async (req, res) => {
 
     const db = getDB();
     const tags = await db.collection("tags")
-      .find({ userId: userId })
+      .find({ user_id: userId })
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit)
       .toArray();
 
     // on renvoye aussi le total pour aider le front à gérer ses limites
-    const totalTags = await db.collection("tags").countDocuments({ userId: userId });
+    const totalTags = await db.collection("tags").countDocuments({ user_id: userId });
 
     res.json({
       tags,
