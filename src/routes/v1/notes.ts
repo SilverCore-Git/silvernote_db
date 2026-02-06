@@ -33,9 +33,20 @@ router.get('/user/:user_id/id/:uuid', async (req, res) => {
   const id = req.params.uuid;
   const user_id = req.params.user_id;
 
+  let query;
+
+  if (user_id == 'justID')
+  {
+    query = { uuid: id };
+  }
+  else
+  {
+    query = { user_id: user_id, uuid: id };
+  }
+
   try {
     const db = getDB();
-    const notes = await db.collection("notes").find({ user_id: user_id, uuid: id }).toArray();
+    const notes = await db.collection("notes").find(query).toArray();
     res.json({ notes });
   } 
   catch (err:any) {
