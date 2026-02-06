@@ -79,9 +79,11 @@ router.get("/user/:user_id/index/start/:start/end/:end", async (req, res) => {
 
   try {
 
+    const noPinned = req.query.noPinned == '1';
     const user_id = req.params.user_id;
     const start = parseInt(req.params.start) || 0;
     const end = parseInt(req.params.end) || 20;
+    let query;
 
     // Calcul du nombre d'éléments à récupérer
     // Exemple: de 0 à 10 = 10 éléments.
@@ -90,9 +92,18 @@ router.get("/user/:user_id/index/start/:start/end/:end", async (req, res) => {
 
     const db = getDB();
 
+    if (noPinned)
+    {
+      query = { user_id: user_id, pinned: false };
+    }
+    else
+    {
+      query = { user_id: user_id };
+    }
+
     const [ notes, totalNotes ] = await Promise.all([
       db.collection("notes")
-        .find({ user_id: user_id })
+        .find(query)
         .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(limit)
