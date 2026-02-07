@@ -5,6 +5,7 @@ import 'dotenv/config';
 import AuthMiddleware from "./middleware/Auth";
 
 import notes from "./routes/v1/notes";
+import notesv2 from "./routes/v2/notes";
 import tags from "./routes/v1/tags";
 import visitors from "./routes/v1/visitors";
 import { SilverIssueMiddleware } from "./lib/silverissue";
@@ -25,6 +26,7 @@ app.use('/visitors', visitors);
 app.use('/file', file);
 
 app.use('/v1/notes', notes);
+app.use('/v2/notes', notesv2);
 app.use('/v1/tags', tags);
 app.use('/v1/visitors', visitors);
 app.use('/v1/file', file);
