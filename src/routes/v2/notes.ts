@@ -200,13 +200,14 @@ router.post("/update", async (req, res) => {
         content: note.content, 
         title: note.title, 
         icon: note.icon, 
-        tags: note.tags, 
+        tags: note.tags,
+        pinned: note.pinned,
         lastSaveAt: new Date() 
       } },
       { upsert: false }
     );
 
-    res.status(201).json({ uuid: note.uuid, _id: result.upsertedId });
+    res.status(201).json({ uuid: note.uuid, ...result });
 
   }
   catch (err:any) {
